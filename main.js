@@ -30,9 +30,9 @@ function render() {
 
   if (!capturing) {
     ctx.clearRect(0, 0, width, height),
-      ctx.drawImage(camera, 0, 0, videoSize.width, videoSize.height, (width - videoSize.width * ratio) / 2, (height - videoSize.height * ratio) / 2, videoSize.width * ratio, videoSize.height * ratio),
-      ctx.drawImage(choosen, 0, 0, width, height),
-      window.requestAnimationFrame(render)
+    ctx.drawImage(camera, 0, 0, videoSize.width, videoSize.height, (width - videoSize.width * ratio) / 2, (height - videoSize.height * ratio) / 2, videoSize.width * ratio, videoSize.height * ratio),
+    ctx.drawImage(choosen, 0, 0, width, height),
+    window.requestAnimationFrame(render)
   }
 }
 
@@ -58,19 +58,19 @@ document.getElementById("capture").addEventListener("click", () => {
   const a = document.getElementById("download");
 
   capturing = true,
-    camera.pause(),
-    a.href = dataURIToBlob(canvas.toDataURL()),
-    a.download = `You & ${choosen.id}`,
-    a.click(),
-    camera.play(),
-    capturing = false,
-    render()
+  camera.pause(),
+  a.href = dataURIToBlob(canvas.toDataURL()),
+  a.download = `You & ${choosen.id}`,
+  a.click(),
+  camera.play(),
+  capturing = false,
+  render()
 }),
 
 document.getElementById("switch").addEventListener("click", () => {
   stop(),
-    mode = `${mode === "user" ? "environment" : "user"}`,
-    capture(mode)
+  mode = `${mode === "user" ? "environment" : "user"}`,
+  capture(mode)
 }),
 
 [...document.querySelectorAll(".twice")].forEach(twice => {
