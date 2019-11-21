@@ -17,7 +17,7 @@ const canvas = document.getElementById("canvas"),
 
 let choosen = document.getElementById("chaeyoung"),
   mode = "user",
-  capturing = false;
+  capturing = 0;
 
 function render() {
   const width = canvas.width,
@@ -57,13 +57,13 @@ capture(mode),
 document.getElementById("capture").addEventListener("click", () => {
   const a = document.getElementById("download");
 
-  capturing = true,
+  capturing = 1,
   camera.pause(),
   a.href = dataURIToBlob(canvas.toDataURL()),
   a.download = `You & ${choosen.id}`,
   a.click(),
   camera.play(),
-  capturing = false,
+  capturing = 0,
   render()
 }),
 
