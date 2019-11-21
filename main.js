@@ -50,31 +50,31 @@ function dataURIToBlob(dataURI) {
   }));
 }
 
-window.requestAnimationFrame(render),
+render(),
 
-  capture(mode),
+capture(mode),
 
-  document.getElementById("capture").addEventListener("click", () => {
-    const a = document.getElementById("download");
+document.getElementById("capture").addEventListener("click", () => {
+  const a = document.getElementById("download");
 
-      capturing = true,
-      camera.pause(),
-      a.href = dataURIToBlob(canvas.toDataURL()),
-      a.download = `You & ${choosen.id}`,
-      a.click(),
-      camera.play(),
-      capturing = false,
-      render()
-  }),
+  capturing = true,
+    camera.pause(),
+    a.href = dataURIToBlob(canvas.toDataURL()),
+    a.download = `You & ${choosen.id}`,
+    a.click(),
+    camera.play(),
+    capturing = false,
+    render()
+}),
 
-  document.getElementById("switch").addEventListener("click", () => {
-    stop(),
-      mode = `${mode === "user" ? "environment" : "user"}`,
-      capture(mode)
-  }),
+document.getElementById("switch").addEventListener("click", () => {
+  stop(),
+    mode = `${mode === "user" ? "environment" : "user"}`,
+    capture(mode)
+}),
 
-  [...document.querySelectorAll(".twice")].forEach(twice => {
-    twice.addEventListener("click", e => {
-      choosen = e.target
-    })
-  });
+[...document.querySelectorAll(".twice")].forEach(twice => {
+  twice.addEventListener("click", e => {
+    choosen = e.target
+  })
+})
