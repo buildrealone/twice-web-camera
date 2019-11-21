@@ -57,9 +57,9 @@ window.requestAnimationFrame(render),
   document.getElementById("capture").addEventListener("click", () => {
     const a = document.getElementById("download");
 
-    capturing = true,
-      camera.pause()
-    a.href = dataURIToBlob(canvas.toDataURL()),
+      capturing = true,
+      camera.pause(),
+      a.href = dataURIToBlob(canvas.toDataURL()),
       a.download = `You & ${choosen.id}`,
       a.click(),
       camera.play(),
