@@ -17,9 +17,9 @@ const canvas = document.getElementById("canvas"),
 
 let choosen = document.getElementById("chaeyoung"),
   mode = "user",
-  capturing = 0;
+  capturing = false;
 
-function render() {
+const render = () => {
   const width = canvas.width,
     height = canvas.height,
     videoSize = {
@@ -28,16 +28,16 @@ function render() {
     },
     ratio = Math.max(width / videoSize.width, height / videoSize.height);
 
-  if (!capturing) {
+  capturing || (
     ctx.clearRect(0, 0, width, height),
     ctx.drawImage(camera, 0, 0, videoSize.width, videoSize.height, (width - videoSize.width * ratio) / 2, (height - videoSize.height * ratio) / 2, videoSize.width * ratio, videoSize.height * ratio),
     ctx.drawImage(choosen, 0, 0, width, height),
     window.requestAnimationFrame(render)
-  }
-}
+  )
+};
 
-function dataURIToBlob(dataURI) {
-  var binStr = atob(dataURI.split(',')[1]),
+const dataURIToBlob = dataURI => {
+  const binStr = atob(dataURI.split(',')[1]),
     len = binStr.length,
     arr = new Uint8Array(len);
 
@@ -48,7 +48,7 @@ function dataURIToBlob(dataURI) {
   return window.URL.createObjectURL(new Blob([arr], {
     type: "image/png"
   }));
-}
+};
 
 render(),
 
@@ -57,13 +57,13 @@ capture(mode),
 document.getElementById("capture").addEventListener("click", () => {
   const a = document.getElementById("download");
 
-  capturing = 1,
+  capturing = true,
   camera.pause(),
   a.href = dataURIToBlob(canvas.toDataURL()),
   a.download = `You & ${choosen.id}`,
   a.click(),
   camera.play(),
-  capturing = 0,
+  capturing = false,
   render()
 }),
 
