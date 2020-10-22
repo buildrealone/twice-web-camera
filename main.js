@@ -1,80 +1,91 @@
-const canvas = document.getElementById("canvas"),
-  ctx = canvas.getContext("2d"),
-  camera = document.getElementById("camera"),
-  capture = mode => {
-    navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: {
-        facingMode: mode
-      }
-    }).then(stream => {
-      camera.srcObject = stream;
-    })
-  },
-  stop = () => {
-    camera.srcObject && camera.srcObject.getTracks().forEach(t => t.stop());
-  };
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const camera = document.getElementById("camera");
+let choosen = document.getElementById("chaeyoung");
+let mode = "user";
+let capturing = false;
 
-let choosen = document.getElementById("chaeyoung"),
-  mode = "user",
-  capturing = false;
+function capture(mode) {
+    navigator.mediaDevices
+        .getUserMedia({
+            audio: false,
+            video: {
+                facingMode: mode,
+            },
+        })
+        .then((stream) => {
+            camera.srcObject = stream;
+        });
+}
 
-const render = () => {
-  const width = canvas.width,
-    height = canvas.height,
-    videoSize = {
-      width: camera.offsetWidth,
-      height: camera.offsetHeight
-    },
-    ratio = Math.max(width / videoSize.width, height / videoSize.height);
+function stopCamera() {
+    camera.srcObject && camera.srcObject.getTracks().forEach((t) => t.stop());
+}
 
-  capturing || (
-    ctx.clearRect(0, 0, width, height),
-    ctx.drawImage(camera, 0, 0, videoSize.width, videoSize.height, (width - videoSize.width * ratio) / 2, (height - videoSize.height * ratio) / 2, videoSize.width * ratio, videoSize.height * ratio),
-    ctx.drawImage(choosen, 0, 0, width, height),
-    window.requestAnimationFrame(render)
-  )
-};
+function render() {
+    const width = canvas.width;
+    const height = canvas.height;
+    const videoSize = {
+        width: camera.offsetWidth,
+        height: camera.offsetHeight,
+    };
+    const ratio = Math.max(width / videoSize.width, height / videoSize.height);
 
-const dataURIToBlob = dataURI => {
-  const binStr = atob(dataURI.split(',')[1]),
-    len = binStr.length,
-    arr = new Uint8Array(len);
+    if (!capturing) {
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(
+            camera,
+            0,
+            0,
+            videoSize.width,
+            videoSize.height,
+            (width - videoSize.width * ratio) / 2,
+            (height - videoSize.height * ratio) / 2,
+            videoSize.width * ratio,
+            videoSize.height * ratio
+        );
+        ctx.drawImage(choosen, 0, 0, width, height);
+        window.requestAnimationFrame(render);
+    }
+}
 
-  for (var i = 0; i < len; i++) {
-    arr[i] = binStr.charCodeAt(i);
-  }
+function dataURIToBlob(dataURI) {
+    const binStr = atob(dataURI.split(",")[1]);
+    const len = binStr.length;
+    const arr = new Uint8Array(len);
 
-  return window.URL.createObjectURL(new Blob([arr], {
-    type: "image/png"
-  }));
-};
+    for (var i = 0; i < len; i++) {
+        arr[i] = binStr.charCodeAt(i);
+    }
 
-render(),
+    return window.URL.createObjectURL(
+        new Blob([arr], {
+            type: "image/png",
+        })
+    );
+}
 
-capture(mode),
-
+render();
+capture(mode);
 document.getElementById("capture").addEventListener("click", () => {
-  const a = document.getElementById("download");
+    const a = document.getElementById("download");
 
-  capturing = true,
-  camera.pause(),
-  a.href = dataURIToBlob(canvas.toDataURL()),
-  a.download = `You & ${choosen.id}`,
-  a.click(),
-  camera.play(),
-  capturing = false,
-  render()
-}),
-
+    (capturing = true),
+        camera.pause(),
+        (a.href = dataURIToBlob(canvas.toDataURL())),
+        (a.download = `You & ${choosen.id}`),
+        a.click(),
+        camera.play(),
+        (capturing = false),
+        render();
+});
 document.getElementById("switch").addEventListener("click", () => {
-  stop(),
-  mode = `${mode === "user" ? "environment" : "user"}`,
-  capture(mode)
-}),
-
-[...document.querySelectorAll(".twice")].forEach(twice => {
-  twice.addEventListener("click", e => {
-    choosen = e.target
-  })
-})
+    stopCamera();
+    mode = `${mode === "user" ? "environment" : "user"}`;
+    capture(mode);
+});
+[...document.querySelectorAll(".twice")].forEach((twice) => {
+    twice.addEventListener("click", (e) => {
+        choosen = e.target;
+    });
+});
