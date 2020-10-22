@@ -68,16 +68,16 @@ function dataURIToBlob(dataURI) {
 render();
 capture(mode);
 document.getElementById("capture").addEventListener("click", () => {
-    const a = document.getElementById("download");
+    const downloadBtn = document.getElementById("download");
 
-    (capturing = true),
-        camera.pause(),
-        (a.href = dataURIToBlob(canvas.toDataURL())),
-        (a.download = `You & ${choosen.id}`),
-        a.click(),
-        camera.play(),
-        (capturing = false),
-        render();
+    capturing = true;
+    camera.pause();
+    downloadBtn.href = dataURIToBlob(canvas.toDataURL());
+    downloadBtn.download = `You & ${choosen.id}`;
+    downloadBtn.click();
+    camera.play();
+    capturing = false;
+    render();
 });
 document.getElementById("switch").addEventListener("click", () => {
     stopCamera();
