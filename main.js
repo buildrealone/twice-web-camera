@@ -39,7 +39,7 @@ function render() {
             0,
             videoSize.width,
             videoSize.height,
-            (width - videoSize.width * ratio) / 2,
+            (width - videoSize.width * ratio) / 2, // 2
             (height - videoSize.height * ratio) / 2,
             videoSize.width * ratio,
             videoSize.height * ratio
